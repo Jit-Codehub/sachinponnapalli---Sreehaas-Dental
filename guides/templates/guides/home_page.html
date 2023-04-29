@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+
+{% block head %}
+<title>{{homepage_blog_obj.meta_title}}</title>
+<meta name="description" content="{{homepage_blog_obj.meta_desc}}">
+<!-- Open Graph Meta -->
+<meta property="og:site_name" content="EVCarsHub">
+<meta property="og:url" content="{{request.build_absolute_uri}}">
+<meta property="og:title" content="{{homepage_blog_obj.meta_title}} - evcarshub.com">
+<meta property="og:description" content="{{homepage_blog_obj.meta_desc}}">
+<meta property="og:type" content="website">
+{% if homepage_blog_obj.featured_image %}
+<meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{{homepage_blog_obj.featured_image.url}}">
+{% else %}
+<meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{% static 'favicon.png' %}">
+{% endif %}
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:url" content="{{request.build_absolute_uri}}">
+<meta name="twitter:title" content="{{homepage_blog_obj.meta_title}} - evcarshub.com">
+<meta name="twitter:description" content="{{homepage_blog_obj.meta_desc}}">
+{% if homepage_blog_obj.featured_image %}
+<meta property="twitter:image" content="{{request.scheme}}://{{request.get_host}}{{homepage_blog_obj.featured_image.url}}">
+{% else %}
+<meta property="twitter:image" content="{{request.scheme}}://{{request.get_host}}{% static 'favicon.png' %}">
+{% endif %}
+{% endblock head %}
+
+
+{% block style %}
+<style>
+</style>
+{% endblock style %}
+
+
+{% block body %}
+<div class="container mt-4">
+  <div class="card guides">
+    <div class="card-body">
+        <div class="card-text">
+            {{homepage_blog_obj.content|render_template_content:render_template_content_context}}
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

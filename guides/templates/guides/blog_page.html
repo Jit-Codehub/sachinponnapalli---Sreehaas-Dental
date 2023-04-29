@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>{{blog_obj.meta_title}} - evcarshub.com</title>
+<meta name="description" content="{{blog_obj.meta_desc}}">
+<!-- Open Graph Meta -->
+<meta property="og:site_name" content="EVCarsHub">
+<meta property="og:url" content="{{request.build_absolute_uri}}">
+<meta property="og:title" content="{{blog_obj.meta_title}} - evcarshub.com">
+<meta property="og:description" content="{{blog_obj.meta_desc}}">
+<meta property="og:type" content="website">
+{% if blog_obj.featured_image %}
+<meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{{blog_obj.featured_image.url}}">
+{% else %}
+<meta property="og:image" content="{{request.scheme}}://{{request.get_host}}{% static 'favicon.png' %}">
+{% endif %}
+
+<!-- Twitter Meta -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:url" content="{{request.build_absolute_uri}}">
+<meta name="twitter:title" content="{{blog_obj.meta_title}} - evcarshub.com">
+<meta name="twitter:description" content="{{blog_obj.meta_desc}}">
+{% if blog_obj.featured_image %}
+<meta property="twitter:image" content="{{request.scheme}}://{{request.get_host}}{{blog_obj.featured_image.url}}">
+{% else %}
+<meta property="twitter:image" content="{{request.scheme}}://{{request.get_host}}{% static 'favicon.png' %}">
+{% endif %}
+{% endblock head %}
+
+
+{% block style %}
+<style>
+	.recent-blogs-links ul{
+		list-style: none;
+	}
+</style>
+{% endblock style %}
+
+
+{% block body %}
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-lg-7 col-xl-8">
+			<h1>{{blog_obj.meta_title}}</h1>
+			<p class="mb-0 pb-0">Medically reviewed by {{blog_obj.created_by}}</p>
+			<p>By {{blog_obj.created_by}} &#9679; {{blog_obj.created_at|date:"F d, Y"}}</p>
+			<div class="guides">
+				{{blog_obj.content|safe}}
+			</div>
+		</div> <!-- Left side div -->
+
+		<div class="recent-blogs-links col-lg-5 col-xl-4">
+			<h3 style="font-weight: 600;">Recent Articles</h3>
+			<ul class="p-2">
+				{% for guide in latest_blogs %}
+				<li class="mb-3">
+					<a class="row no-gutters" href="{{guide.link}}">
+						<img class="pr-2 sm-img col-5" alt="{{guide.img_alt}}" src="{{guide.img}}">
+						<span class="col-7">{{guide.title|truncatechars:60}}</span>
+					</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div> <!-- Right side div -->
+	</div> <!-- row -->
+</div>
+{% endblock body %}
+
+
+{% block script %}
+<script>
+	$(document).ready(function () {
+		$(".guides p:has(img)").css({ "text-align": "center" });
+	});
+</script>
+{% endblock script %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block schema %}
+{% if doctor_schema %}{{doctor_schema|safe}}{% endif %}
+{% endblock schema %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/doctors.css' %}">
+{% endblock style %}
+
+
+{% block body %}
+<div class="pt-5 pb-3">
+	<div class="container col-lg-8">
+		<div class="row profile">
+			<div class="col-lg-4 text-center my-auto">
+				<img class="rounded-circle card-effect profile-photo" src="{{meta_img_url}}"
+					alt="{{doctor_image_caption}}">
+			</div>
+			<div class="col-lg-8 text-left profile-text mt-4 my-lg-auto">
+				<h1 class="profile-name">{{doctor_obj.name}}, {{doctor_obj.job_title}}</h1>
+				{{doctor_obj.description|safe}}
+				<p class="round-icon mt-2">
+					{% for social in doctor_obj.social_links.all %}
+					<a class="mr-1" target="_blank" href="{{social.url}}">
+						<i class="fab fa-{{social.name}}"></i>
+					</a>
+					{% endfor %}
+				</p>
+			</div>
+		</div> <!-- row -->
+	</div> <!-- container -->
+</div>
+
+	
+
+<div class="container col-lg-7">
+
+	<table class="table table-borderless mb-4">
+		<tbody>
+			{% if doctor_profile_table_data %}
+			{% for heading, value in doctor_profile_table_data %}
+			<tr>
+				<th>
+					{{heading}}
+				</th>
+				<th>:</th>
+				<td>
+					{{value}}
+				</td>
+			</tr>
+			{% endfor %}
+			{% endif %}
+
+			{% if doctor_obj.alumni.all %}
+			<tr>
+				<th>
+					Education
+				</th>
+				<th>:</th>
+				<td>
+					{% for alumni in doctor_obj.alumni.all %}
+						<p class="m-0">{{alumni.program_name}}, {{alumni.name}}</p>
+					{% endfor %}
+				</td>
+			</tr>
+			{% endif %}
+
+			{% if doctor_obj.awards.all %}
+			<tr>
+				<th>
+					Awards
+				</th>
+				<th>:</th>
+				<td>
+					{% for award in doctor_obj.awards.all %}
+						<p class="m-0">{{award.name}}</p>
+					{% endfor %}
+				</td>
+			</tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+	{% if doctor_extra_informations %}
+		{% for information in doctor_extra_informations %}
+		<div class="extra-informations mb-4">
+			<h3>{{information.heading}}</h3>
+			{{information.body|safe}}
+		</div>
+		{% endfor %}
+	{% endif %}
+</div>
+<br>
+{% endblock body %}
